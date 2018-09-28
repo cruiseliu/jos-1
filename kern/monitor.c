@@ -54,11 +54,30 @@ mon_kerninfo(int argc, char **argv, struct Trapframe *tf)
 	return 0;
 }
 
+typedef union addr addr_t;
+
+union addr {
+    addr_t *ptr;
+    uint32_t addr;
+    uint32_t *data;
+};
+
 int
 mon_backtrace(int argc, char **argv, struct Trapframe *tf)
 {
-	// Your code here.
-	return 0;
+    cprintf("Stack backtrace:\n");
+    addr_t ebp;
+    ebp.addr = read_ebp();
+    for (; ebp.ptr; ebp = *ebp.ptr) {
+        uint32_t eip = ebp.data[1];
+        uint32_t *args = ebp.data + 2;
+        cprintf("  ebp %08x  eip %08x  args %08x %08x %08x %08x %08x\n",
+                ebp.addr, eip,
+                args[0], args[1], args[2], args[3], args[4]
+            );
+    }
+
+    return 0;
 }
 
 
