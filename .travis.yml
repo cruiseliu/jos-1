@@ -1,0 +1,9 @@
+dist: xenial
+language: generic
+before_install:
+    sudo apt install -y qemu
+    sudo ln -s qemu-system-x86_64 /usr/bin/qemu
+install:
+    make
+script:
+    ./grade-lab1
