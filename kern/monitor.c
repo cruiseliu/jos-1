@@ -75,6 +75,18 @@ mon_backtrace(int argc, char **argv, struct Trapframe *tf)
                 ebp.addr, eip,
                 args[0], args[1], args[2], args[3], args[4]
             );
+
+        struct Eipdebuginfo info;
+        if (debuginfo_eip(ebp.data[1], &info) < 0) {
+            cprintf("Failed to read debug info\n");
+            continue;
+        }
+
+        cprintf("         %s:%d: %.*s+%d\n",
+                info.eip_file, info.eip_line,
+                info.eip_fn_namelen, info.eip_fn_name,
+                eip - info.eip_fn_addr
+            );
     }
 
     return 0;
