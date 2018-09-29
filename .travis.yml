@@ -2,7 +2,7 @@ dist: xenial
 sudo: required
 language: generic
 before_install:
-  - sudo apt-get install -y qemu
+  - sudo apt-get install -y --allow-unauthenticated qemu
   - sudo ln -s qemu-system-x86_64 /usr/bin/qemu
 install:
   - make
